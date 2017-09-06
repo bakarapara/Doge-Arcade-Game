@@ -1,13 +1,12 @@
 ///////// General variables /////////
 
 
-
+var tileWidth = 101,
+    tileHeight = 83;
 var initialScore = 5; // initial score
 var scoreToWin = 10; // score to win the game
-var positions = [100, 200, 300]; // enemies start positions
+var positions = [tileHeight, tileHeight * 2, tileHeight * 3, tileHeight * 4 ]; // enemies start positions
 var speed = 300;
-
-
 
 
 ////////////////////////////////////////////
@@ -23,8 +22,8 @@ var Enemy = function() {
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
-    this.x = -50;
-    this.y = 100;
+    this.x = -tileWidth;
+    this.y = tileHeight;
     this.speed = Math.floor((Math.random() * speed) + speed);
     this.sprite = 'images/kitty.png';
     this.reset();
@@ -38,9 +37,10 @@ Enemy.prototype.update = function(dt) {
     // all computers.
     this.x += this.speed * dt;
     // reset enemy if out of canvas
-    if (this.x > 500) {
+    if (this.x > tileWidth * 5) {
         this.reset();
     }
+    collision(this); // check if collided
 };
 
 // Draw the enemy on the screen, required method for game
@@ -50,9 +50,21 @@ Enemy.prototype.render = function() {
 
 
 Enemy.prototype.reset = function() {
-    this.x = -100;
+    this.x = -tileWidth;
     this.y = positions[Math.floor(Math.random() * 4)];
 };
+
+var collision = function(enemy) {
+    if (
+        player.y + 125 >= enemy.y + 75
+        && player.x + 25 <= enemy.x + 75
+        && player.y + 75 <= enemy.y + 125
+        && player.x + 75 >= enemy.x + 25) {
+        player.hit();
+        player.reset();
+        console.log('collided!');
+    }
+    }
 
 
 ////////////////////////////////////////////
@@ -65,8 +77,8 @@ Enemy.prototype.reset = function() {
 
 
 var Player = function() {
-    this.x = 200;
-    this.y = 400;
+    this.x = tileWidth * 2;
+    this.y = tileHeight * 5;
     this.sprite = 'images/doge.png';
 };
 
@@ -76,26 +88,15 @@ Player.prototype.render = function() {
 };
 
 Player.prototype.update = function() {
-    this.collide();
+    // this.collide(); moved collision check method into Enemy.prototype
 };
 
-Player.prototype.collide = function() {
-    var inter = this;
-    allEnemies.forEach(function(enemy) {
-        if (enemy.y == inter.y) {
-            if (enemy.x >= inter.x - 30 && enemy.x <= inter.x + 30) {
-                inter.hit();
-                inter.reset();
-            }
-        }
-    });
-};
 
 
 
 Player.prototype.reset = function() {
-    this.x = 200;
-    this.y = 400;
+  this.x = tileWidth * 2;
+  this.y = tileHeight * 5;
 };
 
 
@@ -106,20 +107,22 @@ Player.prototype.reset = function() {
 Player.prototype.handleInput = function(event) {
     this.userInput = event;
     if (this.userInput === 'left') {
-        this.x = this.x - 100;
+        this.x = this.x - tileWidth;
     } else if (this.userInput === 'right') {
-        this.x = this.x + 100;
+        this.x = this.x + tileWidth;
     } else if (this.userInput === 'up') {
-        this.y = this.y - 100;
+        this.y = this.y - tileHeight;
     } else if (this.userInput === 'down') {
-        this.y = this.y + 100;
+        this.y = this.y + tileHeight;
     }
-    if (this.y > 400 || this.x < 0  || this.x > 400) {
+    if (this.y > tileHeight * 5 || this.x < -tileHeight  || this.x > tileWidth * 4) {
         this.reset();
+        console.log('reset!');
     }
-    if (this.y <= -50) {
+    if (this.y <= -tileHeight) {
         this.score();
         this.reset();
+        console.log('score!');
     }
 };
 
