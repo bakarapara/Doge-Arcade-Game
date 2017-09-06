@@ -3,7 +3,7 @@
 Use the arrow keys to control the Doge. You need to score 10 points to win the game. Avoid the kittens!
 
 # Screenshot
-![Doge Arcade Game Screenshot](http://magnum.az/udacity/Doge-Arcade-Game/images/doge_screen.jpg)
+![Doge Arcade Game Screenshot](https://raw.githubusercontent.com/rakhmanovr/Doge-Arcade-Game/master/images/doge_screen.jpg)
 
 ## Play online
 
