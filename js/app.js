@@ -6,7 +6,25 @@ var tileWidth = 101,
 var initialScore = 5; // initial score
 var scoreToWin = 10; // score to win the game
 var positions = [tileHeight, tileHeight * 2, tileHeight * 3, tileHeight * 4 ]; // enemies start positions
-var speed = 300;
+var speed = 100;
+
+
+////////////////////////////////////////////
+////////////////// Super //////////////////
+////////////////////////////////////////////
+
+
+ var Char = function (x, y, sprite) {
+   this.x = x;
+   this.y = y;
+   this.sprite = sprite;
+   this.reset();
+ };
+
+ Char.prototype.render = function() {
+     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+ };
+
 
 
 ////////////////////////////////////////////
@@ -16,18 +34,13 @@ var speed = 300;
 
 
 // Enemies our player must avoid
-var Enemy = function() {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-    this.x = -tileWidth;
-    this.y = tileHeight;
+var Enemy = function(x, y) {
+    Char.call(this, x, y, 'images/kitty.png'); // calling super class
     this.speed = Math.floor((Math.random() * speed) + speed);
-    this.sprite = 'images/kitty.png';
-    this.reset();
 };
+
+
+Enemy.prototype = Object.create(Char.prototype);
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -42,12 +55,6 @@ Enemy.prototype.update = function(dt) {
     }
     collision(this); // check if collided
 };
-
-// Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
-
 
 Enemy.prototype.reset = function() {
     this.x = -tileWidth;
@@ -64,7 +71,7 @@ var collision = function(enemy) {
         player.reset();
         console.log('collided!');
     }
-    }
+  };
 
 
 ////////////////////////////////////////////
@@ -76,32 +83,22 @@ var collision = function(enemy) {
 // a handleInput() method.
 
 
-var Player = function() {
-    this.x = tileWidth * 2;
-    this.y = tileHeight * 5;
-    this.sprite = 'images/doge.png';
+var Player = function(x, y) {
+    Char.call(this, x, y, 'images/doge.png'); // calling super class
 };
 
-Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-
-};
+Player.prototype = Object.create(Char.prototype);
 
 Player.prototype.update = function() {
-    // this.collide(); moved collision check method into Enemy.prototype
+    // this.collide(); moved collision check method into Enemy prototype
 };
-
-
-
 
 Player.prototype.reset = function() {
   this.x = tileWidth * 2;
   this.y = tileHeight * 5;
 };
 
-
 ///////// Player moves /////////
-
 
 
 Player.prototype.handleInput = function(event) {
