@@ -7,7 +7,7 @@ Use the arrow keys to control the Doge. You need to score 10 points to win the g
 
 ## Play online
 
-Click [here](http://magnum.az/udacity/Doge-Arcade-Game/) to play the game online
+Click [here](https://rakhmanovr.github.io/Doge-Arcade-Game/) to play the game online
 
 ## How to start game from your local machine (Mac OS)
 
